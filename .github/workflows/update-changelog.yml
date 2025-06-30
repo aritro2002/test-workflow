@@ -1,7 +1,7 @@
 on:
   push:
     tags:
-      - "*"
+      - "v*"
 
 jobs:
   release:
@@ -15,8 +15,11 @@ jobs:
 
       - name: Install Cocogitto CLI
         run: |
-          curl -sL https://github.com/cocogitto/cocogitto/releases/latest/download/cog-$(uname -s)-$(uname -m).tar.gz \
-            | tar xz -C /usr/local/bin cog
+          ARCH=$(uname -m)
+          OS=$(uname -s)
+          curl -sLo cog https://github.com/cocogitto/cocogitto/releases/latest/download/cog-${OS}-${ARCH}
+          chmod +x cog
+          sudo mv cog /usr/local/bin/cog
 
       - name: Generate changelog
         run: |

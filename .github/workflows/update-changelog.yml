@@ -1,7 +1,7 @@
 on:
   push:
     tags:
-      - "*" # or '*' if your tags don't follow semantic versioning
+      - "v*"
 
 jobs:
   release:
@@ -13,7 +13,12 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Cocogitto Changelog Generation
+      - name: Install Cocogitto CLI
+        run: |
+          curl -sL https://github.com/cocogitto/cocogitto/releases/latest/download/cog-$(uname -s)-$(uname -m).tar.gz \
+            | tar xz -C /usr/local/bin cog
+
+      - name: Generate changelog
         run: |
           VERSION=${GITHUB_REF#refs/tags/}
           echo "Generating changelog for $VERSION"
